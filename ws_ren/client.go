@@ -29,28 +29,44 @@ func main() {
 
   sendMsg(ws, "Hi.")
   sendMsg(ws, "I'm client.")
+  sendMsg(ws, "Bye.")
 
-  time.Sleep(1*time.Second)
+  time.Sleep(10*time.Second)
   _ = ws.Close()
 
-  defer log.Printf("End Webscoket.")
+  defer log.Printf("End Webscoket.\n")
 }
 
 
 func sendMsg(ws *websocket.Conn, msg string) {
-    // var sndMsg = EchoMsg{msg}
+  // var sndMsg = EchoMsg{msg}
 
-    websocket.Message.Send(ws, msg)
+  err := websocket.Message.Send(ws, msg)
+  if err != nil {
+    log.Print(err)
+  } else {
     fmt.Printf("Send data=%#v\n", msg)
+  }
 }
 
 func receiveMsg(ws *websocket.Conn) {
-    // var rcvMsg EchoMsg
-    var msg string
+  // var rcvMsg EchoMsg
+  var msg string
 
-    for {
-        websocket.Message.Receive(ws, &msg)
-        fmt.Printf("Receive data=%#v\n", msg)
+  for err := websocket.Message.Receive(ws, &msg); err == nil; err = websocket.Message.Receive(ws, &msg) {
+    fmt.Printf("Receive data=%#v\n", msg)
+  }
+  defer log.Printf("End Receiving.\n")
+
+  /*
+  for {
+    err := websocket.Message.Receive(ws, &msg)
+    if err != nil {
+      log.Print(err)
+    } else {
+      fmt.Printf("Receive data=%#v\n", msg)
     }
+  }
+  */
 }
 
