@@ -12,8 +12,9 @@ import (
 func main() {
   r := gin.Default()
   // 静的ファイルの設定
-  r.LoadHTMLGlob("templates/*")
-  r.Static("/js", "/home/munvei/workspace/golang/gin/js")
+  path := "/go/web_app/ws_ren"
+  r.LoadHTMLGlob(path+"/templates/*")
+  r.Static("/js", path+"/js")
   m := melody.New()
 
   // User Agentを取得
