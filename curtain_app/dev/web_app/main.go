@@ -7,12 +7,14 @@ import (
 
   "github.com/gin-gonic/gin"
   "gopkg.in/olahol/melody.v1"
+
+  "./module"
 )
 
 func main() {
   r := gin.Default()
   // 静的ファイルの設定
-  path := "/go/web_app/ws_ren"
+  path := "/go/web_app"
   r.LoadHTMLGlob(path+"/templates/*")
   r.Static("/js", path+"/js")
   m := melody.New()
@@ -31,6 +33,12 @@ func main() {
       "message": "Hello World",
     })
   })
+
+  r.GET("/db", func(c *gin.Context) {
+    data := module.DBSelect()
+    c.HTML(http.StatusOK, "showdb.html", gin.H{"data": data})
+  })
+
   r.GET("/test", func(c *gin.Context) {
     c.HTML(http.StatusOK, "test.html", gin.H{
       "msg": "websocket test",
