@@ -35,8 +35,22 @@ func main() {
   })
 
   r.GET("/db", func(c *gin.Context) {
-    data := module.DBSelect()
-    c.HTML(http.StatusOK, "showdb.html", gin.H{"data": data})
+    c.HTML(http.StatusOK, "showdb.html", gin.H{"data": module.DBSelect()})
+  })
+
+  r.GET("/db_json", func(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{
+      "rows": module.DBSelect(),
+    })
+  })
+
+  r.POST("/insert", func(c *gin.Context) {
+    msg := c.PostForm("msg")
+    module.DBInsert(msg)
+    c.JSON(http.StatusOK, gin.H{
+      "status": "OK",
+      "msg": msg,
+    })
   })
 
   r.GET("/test", func(c *gin.Context) {
