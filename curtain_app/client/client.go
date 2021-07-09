@@ -4,12 +4,14 @@ import (
   "log"
   "fmt"
   "time"
+  "regexp"
+  "os/exec"
 
   "golang.org/x/net/websocket"
 )
 
 var (
-  locate = "localhost:8080/test"
+  locate = "localhost/test"
   origin = "http://" + locate
   ws_url = "ws://" + locate + "/ws"
 )
@@ -29,11 +31,10 @@ func main() {
 
   sendMsg(ws, "Hi.")
   sendMsg(ws, "I'm client.")
+
+  time.Sleep(100*time.Second)
   sendMsg(ws, "Bye.")
-
-  time.Sleep(10*time.Second)
   _ = ws.Close()
-
   defer log.Printf("End Webscoket.\n")
 }
 
@@ -52,9 +53,15 @@ func sendMsg(ws *websocket.Conn, msg string) {
 func receiveMsg(ws *websocket.Conn) {
   // var rcvMsg EchoMsg
   var msg string
-
   for err := websocket.Message.Receive(ws, &msg); err == nil; err = websocket.Message.Receive(ws, &msg) {
+    //var keyph=`call`
+    r := regexp.MustCompile(`call:`)
+    if(r.MatchString(msg)==true){
+      msg = r.ReplaceAllString(msg, "./")
+      callScript(msg)
+    } else {
     fmt.Printf("Receive data=%#v\n", msg)
+    }
   }
   defer log.Printf("End Receiving.\n")
 
@@ -70,3 +77,9 @@ func receiveMsg(ws *websocket.Conn) {
   */
 }
 
+func callScript(msg string){
+  err := exec.Command(msg).Run()
+  if err != nil {
+    fmt.Printf("%#vなどというファイルはないです\n", msg)
+  }
+}
