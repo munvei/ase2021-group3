@@ -5,6 +5,12 @@ import (
   "fmt"
   "time"
 
+  "strings"
+  "bytes"
+  "encoding/json"
+  "net/http"
+  "io/ioutil"
+
   _ "github.com/go-sql-driver/mysql"
 )
 
@@ -59,6 +65,42 @@ func DBSelect() []Log {
     logs = append(logs, Log{id, date, msg})
   }
   return logs
+}
+
+func SendLine(msg string) *http.Response {
+  type Msg struct {
+    Type string `json: "type"`
+    Text string     `json: "text"`
+  }
+
+  type Msgs struct {
+    Messages []Msg      `json: "messages"`
+  }
+
+  msgs := Msgs{[]Msg{Msg{"text", msg}}}
+
+  // read token
+  token_path := "./token.txt"
+  token_b, read_err := ioutil.ReadFile(token_path)
+  if read_err != nil {
+    panic(read_err)
+  }
+  msgs_json_byte, _ := json.Marshal(msgs)
+  msgs_json := string(msgs_json_byte)
+  msgs_json = strings.ToLower(msgs_json)
+  token := strings.TrimRight(string(token_b), "\n")
+
+  URL := "https://api.line.me/v2/bot/message/broadcast"
+  req, _ := http.NewRequest("POST", URL, bytes.NewBuffer([]byte(msgs_json)))
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer "+token)
+
+  client := new(http.Client)
+  res, post_err := client.Do(req)
+  if post_err != nil {
+    panic(post_err)
+  }
+  return res
 }
 
 /*

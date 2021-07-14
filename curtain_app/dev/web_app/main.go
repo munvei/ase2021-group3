@@ -34,16 +34,19 @@ func main() {
     })
   })
 
+  // selectした内容を表示
   r.GET("/db", func(c *gin.Context) {
     c.HTML(http.StatusOK, "showdb.html", gin.H{"data": module.DBSelect()})
   })
 
+  // selectした内容をjsonで返す
   r.GET("/db_json", func(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{
       "rows": module.DBSelect(),
     })
   })
 
+  // dbに追加
   r.POST("/insert", func(c *gin.Context) {
     msg := c.PostForm("msg")
     module.DBInsert(msg)
@@ -53,6 +56,16 @@ func main() {
     })
   })
 
+  // LINEにメッセージを送る
+  r.POST("/line", func(c *gin.Context) {
+    msg := c.PostForm("msg")
+    res := fmt.Sprintf("%v", module.SendLine(msg))
+    c.JSON(http.StatusOK, gin.H{
+      "res": res,
+    })
+  })
+
+  // websocketのテスト
   r.GET("/test", func(c *gin.Context) {
     c.HTML(http.StatusOK, "test.html", gin.H{
       "msg": "websocket test",
