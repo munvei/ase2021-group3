@@ -78,7 +78,7 @@ func receiveMsg(ws *websocket.Conn) {
 }
 
 func callScript(msg string){
-  err := exec.Command(msg).Run()
+  err := exec.Command("sh","-c",msg).Run()
   if err != nil {
     fmt.Printf("%#vなどというファイルはないです\n", msg)
   }
