@@ -32,7 +32,7 @@ func main() {
   sendMsg(ws, "Hi.")
   sendMsg(ws, "I'm client.")
 
-  time.Sleep(100*time.Second)
+  time.Sleep(1000*time.Second)
   sendMsg(ws, "Bye.")
   _ = ws.Close()
   defer log.Printf("End Webscoket.\n")
