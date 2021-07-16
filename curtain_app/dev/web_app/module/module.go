@@ -67,7 +67,7 @@ func DBSelect() []Log {
   return logs
 }
 
-func SendLine(msg string) *http.Response {
+func SendLine(path string, msg string) string {
   type Msg struct {
     Type string `json: "type"`
     Text string     `json: "text"`
@@ -80,8 +80,7 @@ func SendLine(msg string) *http.Response {
   msgs := Msgs{[]Msg{Msg{"text", msg}}}
 
   // read token
-  token_path := "./token.txt"
-  token_b, read_err := ioutil.ReadFile(token_path)
+  token_b, read_err := ioutil.ReadFile(path)
   if read_err != nil {
     panic(read_err)
   }
@@ -100,7 +99,7 @@ func SendLine(msg string) *http.Response {
   if post_err != nil {
     panic(post_err)
   }
-  return res
+  return fmt.Sprintf("%v", res)
 }
 
 /*
