@@ -2,7 +2,6 @@ package main
 
 import (
   "net/http"
-  // "fmt"
   "log"
 
   "github.com/gin-gonic/gin"
@@ -59,7 +58,7 @@ func main() {
   // LINEにメッセージを送る
   r.POST("/line", func(c *gin.Context) {
     msg := c.PostForm("msg")
-    res := fmt.Sprintf("%v", module.SendLine(msg))
+    res := module.SendLine(path+"/module/token.txt", msg)
     c.JSON(http.StatusOK, gin.H{
       "res": res,
     })
