@@ -1,0 +1,35 @@
+.item {
+  color:white;
+  display:inline-block;
+  padding: 0.5em 1em;
+ 　　margin: 2em 0;
+ 　　font-weight: bold;
+ 　　border: solid 2px #0000ff;
+}
+.left-btn{
+  color:white;
+  padding: 0.5em 1em;
+ 　　margin: 2em 0;
+ 　　font-weight: bold;
+ 　　border: solid 2px #0000ff;
+  display:inline-block;
+  float:left;
+}
+.right-btn{
+  color:white;
+  padding: 0.5em 1em;
+ 　　margin: 2em 0;
+ 　　font-weight: bold;
+ 　　border: solid 2px #0000ff;
+  display:inline-block;
+  float:left;
+}
+.time-set{
+  float:left;
+}
+.tables{
+  display:inline-block;
+}
+.con{
+  display: flex;
+}
