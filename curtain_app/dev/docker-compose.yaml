@@ -3,7 +3,7 @@ services:
   gin:
     depends_on:
       - mariadb
-    build: ./gin/Dockerfile
+    build: ./gin
     image: yoichi00/container-ren:gin
     container_name: gin
     restart: always
@@ -13,7 +13,7 @@ services:
       - "./web_app:/go/web_app"
       
   mariadb:
-    build: ./mariadb/Dockerfile
+    build: ./mariadb
     image: yoichi00/container-ren:mariadb
     container_name: mariadb
     restart: always
