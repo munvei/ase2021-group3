@@ -10,20 +10,22 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin_mtdriver, GPIO.OUT)
 
 def open():
-    crtime = time.time()
+    #crtime = time.time()
     GPIO.output(gpio_in1, HIGH)
     GPIO.output(gpio_in2, LOW)
-    return crtime
+    #return crtime
 
 def stop():
+    crtime = time.time()
     GPIO.output(gpio_in1, HIGH)
     GPIO.output(gpio_in2, HIGH)
+    return crtime
 
 def close():
-    crtime = time.time()
+    #crtime = time.time()
     GPIO.output(gpio_in1, LOW)
     GPIO.output(gpio_in2, HIGH)
-    return crtime
+    #return crtime
 
 if __name__ == '__main__':
     open()

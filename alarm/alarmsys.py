@@ -9,13 +9,16 @@ gpio_sensor2 = 25
 pins = [pin, gpio_sensor1, gpio_sensor2]
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pins, GPIO.IN)
-tmp = curtain.open()
-dst = tmp + 30
+interval = 30
+
+curtain.open()
+dst = time.time() + 100
 try:
     while True:
         data1 = GPIO.input(gpio_sensor1)
         if(data1 == 1):
-            curtain.stop()
+            tmp = curtain.stop()
+            dst = tmp + interval
 
         val = GPIO.input(pin)
         print("input:", val)
