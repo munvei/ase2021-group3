@@ -1,16 +1,13 @@
 import RPi.GPIO as GPIO
 import time
-chan = 21
-freq = 8000
+chan = 22
 def buzzer():
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(chan, GPIO.OUT)
 
-    pwm = GPIO.PWM(chan, freq)
-
-    pwm.start(50)
+    GPIO.output(chan, 1)
     time.sleep(3)
-    pwm.stop()
+    GPIO.output(chan, 0)
     GPIO.cleanup()
 
 if __name__ == '__main__':
