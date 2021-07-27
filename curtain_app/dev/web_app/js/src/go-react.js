@@ -23,7 +23,7 @@ class Layout extends React.Component {
       ws: ws,
     };
 
-    const url = "http://localhost/db_json"
+    const url = "http://localhost/db"
     fetch(url).then((response) => response.json()).then((responseJson) => {
       this.setState({tableItems: responseJson.rows});
     });
@@ -51,6 +51,11 @@ class Layout extends React.Component {
   handleSet() {
     this.setState({wakeUpTime: this.state.inputTime});
     this.state.ws.send("code:"+this.state.inputTime);
+  }
+  
+  handleReset() {
+    this.state.ws.send("code:reset");
+    this.setState({wakeUpTime: "リセット"});
   }
 
   handleReload() {
@@ -98,14 +103,15 @@ class Layout extends React.Component {
         {/* カーテン操作用ボタン */}
           <tr>
             <th width="150">現在の状態：</th>
-            <th width="150">{ this.state.statusMsg }</th>
-            <th width="300" colSpan="2"><center><button onClick={ () => {this.handleClick()} }>{ this.state.buttonMsg }</button></center></th>
+            <th colSpan="2">{ this.state.statusMsg }</th>
+            <th colSpan="2"><center><button onClick={ () => {this.handleClick()} }>{ this.state.buttonMsg }</button></center></th>
           </tr>
 
         {/* 起床時刻の設定 */}
           <tr>
             <th width="150">現在の設定時間：</th>
             <th width="150">{ this.state.wakeUpTime }</th>
+            <th width="150"><button onClick={ () => {this.handleReset()} }>リセット</button></th>
             <th width="150"><input type="time" name="time" onChange={ (event) => {this.handleTimeInput(event)} } /></th>
             <th width="150"><button onClick={ () => {this.handleSet()} }>設定</button></th>
           </tr>
