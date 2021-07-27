@@ -17,52 +17,63 @@ class Layout extends React.Component {
       isOpen: false,
       buttonMsg: "開ける",
       statusMsg: "閉まっています",
-      wakeUpTime: "",
+      wakeUpTime: "--：--",
       inputTime: "",
       tableItems: [],
       ws: ws,
+      // url: "http://localhost",
+      url: "http://54.173.221.236",
     };
 
-    const url = "http://54.173.221.236/db"
-    fetch(url).then((response) => response.json()).then((responseJson) => {
+    this.getDB();
+    this.getSettingTime();
+  }
+
+  getSettingTime() {
+    this.state.ws.send();
+    this.state.ws.onmessage = (evt) => {
+      const texts = evt.data.split(" ");
+      this.setState({wakeUpTime: `${texts[1]}：${texts[0]}`});
+    }
+  }
+
+  getDB() {
+    fetch(this.state.url+"/db").then((response) => response.json()).then((responseJson) => {
       this.setState({tableItems: responseJson.rows});
     });
-
   }
 
   handleClick() {
-    if (this.state.isOpen) {
+    if (this.state.isOpen) {  // 開いている状態，----- 閉める -----
       this.setState({
         isOpen: false,
         buttonMsg: "開ける",
         statusMsg: "閉まっています",
       });
-      this.state.ws.send("code:close");
-    } else {
+      this.state.ws.send("call: python3 alarmsys.py close");
+    } else {                  // 閉まっている状態，----- 開ける -----
       this.setState({
         isOpen: true,
         buttonMsg: "閉める",
         statusMsg: "開いています",
       });
-      this.state.ws.send("code:open");
+      this.state.ws.send("call: python3 alarmsys.py open_only");
     }
   }
 
   handleSet() {
+    const splitTexts = this.state.inputTime.split(":"); 
     this.setState({wakeUpTime: this.state.inputTime});
-    this.state.ws.send("code:"+this.state.inputTime);
+    this.state.ws.send(`call: ./cron_make.sh ${splitTexts[1]} ${splitTexts[0]} open`);
   }
   
   handleReset() {
-    this.state.ws.send("code:reset");
-    this.setState({wakeUpTime: "リセット"});
+    this.state.ws.send("call: crontab -r");
+    this.setState({wakeUpTime: "--：--"});
   }
 
   handleReload() {
-    const url = "http://54.173.221.236/db"
-    fetch(url).then((response) => response.json()).then((responseJson) => {
-      this.setState({tableItems: responseJson.rows});
-    });
+    this.getDB();
   }
 
   handleTimeInput(event) {
