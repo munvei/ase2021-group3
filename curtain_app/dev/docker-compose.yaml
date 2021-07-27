@@ -1,0 +1,24 @@
+version: '3'
+services:
+  gin:
+    depends_on:
+      - mariadb
+    build: ./gin
+    image: yoichi00/container-ren:gin
+    container_name: gin
+    restart: always
+    ports: 
+      - "80:8080"
+    volumes:
+      - "./web_app:/go/web_app"
+      
+  mariadb:
+    build: ./mariadb
+    image: yoichi00/container-ren:mariadb
+    container_name: mariadb
+    restart: always
+    volumes:
+      - "./init-sql:/docker-entrypoint-initdb.d"
+    environment:
+      MYSQL_ROOT_PASSWORD: root00
+
