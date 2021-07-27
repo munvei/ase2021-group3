@@ -4,12 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loc.protocol === 'https:') {
         url = 'wss:';
     }
-    url += '//' + loc.host;
-    url += loc.pathname + '/ws';
+    url += '//' + loc.host + loc.pathname + '/ws';
 
-    const ws = new WebSocket(url)
+    const ws = new WebSocket(url);
     ws.onopen = () => {
-        console.log('Connected')
+        console.log('Connected');
     }
 
     ws.onmessage = (evt) => {
