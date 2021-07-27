@@ -44,6 +44,7 @@ func main() {
   r.POST("/line", func(c *gin.Context) {
     msg := c.PostForm("msg")
     res := module.SendLine(path+"/module/token.txt", msg)
+    module.DBInsert(msg)
     c.JSON(http.StatusOK, gin.H{
       "res": res,
     })
@@ -72,4 +73,3 @@ func main() {
 
   r.Run() // listen and serve on 0.0.0.0:8080 <- default
 }
-
