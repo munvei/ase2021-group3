@@ -8,8 +8,8 @@ def buzzer():
     GPIO.output(chan, 1)
     time.sleep(3)
     GPIO.output(chan, 0)
-    GPIO.cleanup()
-
+    #GPIO.cleanup()
+    return 0
 if __name__ == '__main__':
     buzzer()
 
