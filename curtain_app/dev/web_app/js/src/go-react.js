@@ -30,7 +30,7 @@ class Layout extends React.Component {
   }
 
   getSettingTime() {
-    this.state.ws.send();
+    this.state.ws.send("cls");
     this.state.ws.onmessage = (evt) => {
       const texts = evt.data.split(" ");
       this.setState({wakeUpTime: `${texts[1]}：${texts[0]}`});
