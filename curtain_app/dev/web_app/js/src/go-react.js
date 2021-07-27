@@ -11,6 +11,12 @@ class Layout extends React.Component {
     ws.onopen = () => {
       console.log("Connected");
     }
+    ws.onmessage = (evt) => {
+      if (evt.data.match(/^cls:/)) {
+        const texts = evt.data.split(" ");
+        this.setState({wakeUpTime: `${texts[1]}：${texts[0]}`});
+      }
+    }
 
     this.state = {
       time: "",
@@ -30,13 +36,7 @@ class Layout extends React.Component {
   }
 
   getSettingTime() {
-    this.state.ws.send("cls");
-    this.state.ws.onmessage = (evt) => {
-      if (evt.data.match(/^cls:/)) {
-        const texts = evt.data.split(" ");
-        this.setState({wakeUpTime: `${texts[1]}：${texts[0]}`});
-      }
-    }
+    this.state.ws.send("cls"); 
   }
 
   getDB() {
