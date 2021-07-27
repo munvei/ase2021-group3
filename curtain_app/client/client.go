@@ -57,7 +57,7 @@ func receiveMsg(ws *websocket.Conn) {
     //var keyph=`call`
     r := regexp.MustCompile(`call:`)
     if(r.MatchString(msg)==true){
-      msg = r.ReplaceAllString(msg, "./")
+      msg = r.ReplaceAllString(msg, "")
       callScript(msg)
     } else {
     fmt.Printf("Receive data=%#v\n", msg)
