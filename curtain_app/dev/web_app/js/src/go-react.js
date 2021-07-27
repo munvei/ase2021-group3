@@ -59,7 +59,7 @@ class Layout extends React.Component {
   }
 
   handleReload() {
-    const url = "http://localhost/db_json"
+    const url = "http://54.173.221.236/db"
     fetch(url).then((response) => response.json()).then((responseJson) => {
       this.setState({tableItems: responseJson.rows});
     });
